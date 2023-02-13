@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Automatic Online Calibration of Cameras and Lasers 论文阅读本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。 本文使用了一个基本的假设，即点云深度不连续与图像边缘对齐，文中的具体阐述是：其他条件相同的情况下，使用精确校准时，激光数据中的深度不连续点应该比不使用精确校准时时更加频繁的投射到图像边缘上。基于本假设">
+  <meta name="description" content="本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Automatic Online Calibration of Cameras and Lasers论文阅读">
 <meta property="og:url" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="xiaoxiao-1&#39;s Blog">
-<meta property="og:description" content="Automatic Online Calibration of Cameras and Lasers 论文阅读本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。 本文使用了一个基本的假设，即点云深度不连续与图像边缘对齐，文中的具体阐述是：其他条件相同的情况下，使用精确校准时，激光数据中的深度不连续点应该比不使用精确校准时时更加频繁的投射到图像边缘上。基于本假设">
+<meta property="og:description" content="本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213193932292.png">
 <meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213195150868.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213200237727.png">
 <meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213201641571.png">
 <meta property="article:published_time" content="2023-02-13T11:15:20.000Z">
-<meta property="article:modified_time" content="2023-02-13T12:17:44.340Z">
+<meta property="article:modified_time" content="2023-02-13T12:20:06.260Z">
 <meta property="article:author" content="xiaoxiao-1">
 <meta property="article:tag" content="相机激光雷达联合标定">
 <meta property="article:tag" content="论文阅读">
@@ -198,7 +198,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-02-13 19:15:20 / 修改时间：20:17:44" itemprop="dateCreated datePublished" datetime="2023-02-13T19:15:20+08:00">2023-02-13</time>
+              <time title="创建时间：2023-02-13 19:15:20 / 修改时间：20:20:06" itemprop="dateCreated datePublished" datetime="2023-02-13T19:15:20+08:00">2023-02-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -215,6 +215,7 @@
             </span>
 
           
+            <div class="post-description">本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。</div>
 
         </div>
       </header>
