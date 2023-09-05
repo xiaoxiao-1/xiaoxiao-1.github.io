@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Automatic Online Calibration of Cameras and Lasers论文阅读">
+<meta property="og:url" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="xiaoxiao-1&#39;s Blog">
+<meta property="og:description" content="本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213193932292.png">
+<meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213195150868.png">
+<meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213200109045.png">
+<meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213200237727.png">
+<meta property="og:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213201641571.png">
+<meta property="article:published_time" content="2023-02-13T11:15:20.000Z">
+<meta property="article:modified_time" content="2023-08-11T05:08:55.177Z">
+<meta property="article:author" content="xiaoxiao-1">
+<meta property="article:tag" content="相机激光雷达联合标定">
+<meta property="article:tag" content="论文阅读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213193932292.png">
+
+<link rel="canonical" href="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Automatic Online Calibration of Cameras and Lasers论文阅读 | xiaoxiao-1's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">xiaoxiao-1's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">踔厉奋发，极致无憾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
+      <meta itemprop="name" content="xiaoxiao-1">
+      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaoxiao-1's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Automatic Online Calibration of Cameras and Lasers论文阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-13 19:15:20" itemprop="dateCreated datePublished" datetime="2023-02-13T19:15:20+08:00">2023-02-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-11 13:08:55" itemprop="dateModified" datetime="2023-08-11T13:08:55+08:00">2023-08-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%B8%E6%9C%BA%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/" itemprop="url" rel="index"><span itemprop="name">相机激光雷达联合标定</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%B8%E6%9C%BA%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。利用假设点云深度不连续与图像边缘对齐提出的方法得到了较好的效果。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Automatic-Online-Calibration-of-Cameras-and-Lasers-论文阅读"><a href="#Automatic-Online-Calibration-of-Cameras-and-Lasers-论文阅读" class="headerlink" title="Automatic Online Calibration of Cameras and Lasers 论文阅读"></a>Automatic Online Calibration of Cameras and Lasers 论文阅读</h1><p>本文介绍了一种用于自动驾驶中相机和激光雷达在线联合标定的方法，是在线联合标定的开山之作。</p>
+<p>本文使用了一个基本的假设，即点云深度不连续与图像边缘对齐，文中的具体阐述是：<strong>其他条件相同的情况下，使用精确校准时，激光数据中的深度不连续点应该比不使用精确校准时时更加频繁的投射到图像边缘上</strong>。基于本假设，文中提出了一些方法来解决在线标定中的问题。这篇文章做出了两种贡献：</p>
+<ol>
+<li><strong>提出一种概率检测算法，可以实时，高可靠地判断传感器是否准确标定</strong></li>
+<li><strong>提出一种连续标定算法，针对缓慢的外参漂移，在线更新外参</strong></li>
+</ol>
+<p>针对第二点，文中说虽然实时解决具有任意差初始化的校准任然不可行，但是我们可以从已经校准好的参数进行跟踪，当出现微小扰动时可以进行跟踪和校准。</p>
+<h2 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h2><h3 id="图像信息处理"><a href="#图像信息处理" class="headerlink" title="图像信息处理"></a>图像信息处理</h3><ol>
+<li>首先使用边缘检测算法检测图像边缘，得到图像边缘图，本文使用该像素与周围8像素差值的最大绝对值</li>
+<li>使用图像逆距离变换赋予非边缘像素以获得每一个像素的边缘度。</li>
+</ol>
+<script type="math/tex; mode=display">
+D_{i, j}=\alpha \cdot E_{i, j}+(1-\alpha) \cdot \max _{x, y} E_{x, y} \cdot \gamma^{\max (|x-i|,|y-j|)}</script><p><img src="/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213193932292.png" alt="image-20230213193932292"></p>
+<h3 id="激光雷达信息处理"><a href="#激光雷达信息处理" class="headerlink" title="激光雷达信息处理"></a>激光雷达信息处理</h3><p>每条扫面线单独考虑，计算每一条扫描线中激光点与它左右点的不临近度，过滤不临近度小于30cm的，剩下的点组成一个新的点云用于之后的处理。</p>
+<p><img src="/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213195150868.png" alt="image-20230213195150868"></p>
+<h3 id="错误校准检测"><a href="#错误校准检测" class="headerlink" title="错误校准检测"></a>错误校准检测</h3><script type="math/tex; mode=display">
+J_{C}=\sum_{f=n-w}^{n} \sum_{p=1}^{\left|X^{f}\right|} X_{p}^{f} \cdot D_{i, j}^{f}</script><p>$X<em>{p}^{f}$代表激光点云中最后过滤剩下的点云，$D</em>{i, j}^{f}$代表图像数据处理中的深度不连续度，下标i,j是不连续点投影到图像中对应的像素点下标。</p>
+<p>对于每一个校准C都会有有一个$J<em>{C}$与之对应。校准C是一个六维变量，我们选择其几个维度附加微小的扰动，可以得到附加扰动后的$J</em>{C}$，虽然$J<em>{C}$不是一个凸函数，但是对于任意一个比较好的校准参数，周围应该是凸性质的。根据这个假设，我们可以计算周围的几个抽样值，如果扰动得到的值都比原来的差，那么变量$F</em>{C}$应该为1，如果比原来的好应该为0。如此我们测试得到的数据图为：</p>
+<p><img src="/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213200109045.png" alt="image-20230213200109045"></p>
+<p>可以看到，窗口为9帧的时候区分度更加明显。</p>
+<p>对于很多帧我们可以画出直方图：</p>
+<p><img src="/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213200237727.png" alt="image-20230213200237727"></p>
+<p>横轴为$F_{C}$的值，竖轴为出现的频次。注意右边上下两个图的范围。</p>
+<p>我们可以使用正太分布来拟合得到的数据，然后使用公式$P(\text { calibrated })=\frac{e^{-.5\left(x-\mu<em>{1}\right)^{2} / \sigma</em>{1}^{2}}}{e^{-.5\left(x-\mu<em>{1}\right)^{2} / \sigma</em>{1}^{2}}+e^{-.5\left(x-\mu<em>{2}\right)^{2} / \sigma</em>{2}^{2}}}$来计算校准C是正确校准的概率。</p>
+<h3 id="在线错误校准纠正"><a href="#在线错误校准纠正" class="headerlink" title="在线错误校准纠正"></a>在线错误校准纠正</h3><p>上面介绍了如何判断一个校准是否是比较好的校准，下面介绍如何进行实时校准。文中说虽然对于差度比较大的校准进行实时校准是不太可能的，但是对于一些差度比较好的校准是可行的，还可以对较好的校准进行跟踪。文中提出的方法是对随机抽样的结果使用贪心算法，重复找到最优解。</p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="在线错误校准检测"><a href="#在线错误校准检测" class="headerlink" title="在线错误校准检测"></a>在线错误校准检测</h3><p>在九帧窗口上实验，对于0.25度和10cm误差成功率是100%，对于0.1度成功率为90%，也可以通过增加窗口大小来提升成功率，但是代价是实时性会下降。</p>
+<h3 id="在线错误校准纠正-1"><a href="#在线错误校准纠正-1" class="headerlink" title="在线错误校准纠正"></a>在线错误校准纠正</h3><p>yaw轴跟踪的比较好，误差为0.06度，pitch轴和roll轴跟踪的稍微差一点，为0.12度。总体来说效果还是比较好的。</p>
+<p><img src="/2023/02/13/Automatic-Online-Calibration-of-Cameras-and-Lasers%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/image-20230213201641571.png" alt="image-20230213201641571"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%9B%B8%E6%9C%BA%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/" rel="tag"># 相机激光雷达联合标定</a>
+              <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="tag"># 论文阅读</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/12/%E6%B5%85%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="prev" title="浅层神经网络">
+      <i class="fa fa-chevron-left"></i> 浅层神经网络
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/15/%E4%BB%8E%E6%A6%82%E7%8E%87%E8%A7%92%E5%BA%A6%E7%9C%8B%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" rel="next" title="从概率角度看损失函数">
+      从概率角度看损失函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Automatic-Online-Calibration-of-Cameras-and-Lasers-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB"><span class="nav-number">1.</span> <span class="nav-text">Automatic Online Calibration of Cameras and Lasers 论文阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">图像信息处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">激光雷达信息处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E6%A0%A1%E5%87%86%E6%A3%80%E6%B5%8B"><span class="nav-number">1.1.3.</span> <span class="nav-text">错误校准检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E9%94%99%E8%AF%AF%E6%A0%A1%E5%87%86%E7%BA%A0%E6%AD%A3"><span class="nav-number">1.1.4.</span> <span class="nav-text">在线错误校准纠正</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.2.</span> <span class="nav-text">实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E9%94%99%E8%AF%AF%E6%A0%A1%E5%87%86%E6%A3%80%E6%B5%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">在线错误校准检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E9%94%99%E8%AF%AF%E6%A0%A1%E5%87%86%E7%BA%A0%E6%AD%A3-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">在线错误校准纠正</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaoxiao-1"
+      src="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
+  <p class="site-author-name" itemprop="name">xiaoxiao-1</p>
+  <div class="site-description" itemprop="description">怕什么真理无穷，进步一寸有一寸的欢喜</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaoxiao-1</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
