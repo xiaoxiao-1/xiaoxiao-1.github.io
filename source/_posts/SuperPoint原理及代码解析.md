@@ -1,7 +1,7 @@
 ---
 title: SuperPoint原理及代码解析
 date: 2023-08-11 17:55:01
-description: 
+description: SuperPoint是自监督特征点检测方法，在SLAM和SFM中有很重要的用处，并且在这些领域都取得了非常不错的效果
 categories: 
 - 论文阅读
 tags:
