@@ -162,6 +162,76 @@ sudo docker run -it --device=/dev/dri --group-add video --volume=/tmp/.X11-unix:
 
 ```
 
+## Docker代理
+
+### docker pull时代理
+
+在执行`docker pull`时，是由守护进程`dockerd`来执行。因此，代理需要配在`dockerd`的环境中。而这个环境，则是受`systemd`所管控，因此实际是`systemd`的配置。
+
+```bash
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo touch /etc/systemd/system/docker.service.d/proxy.conf
+```
+
+在这个`proxy.conf`文件（可以是任意`*.conf`的形式）中，添加以下内容：
+
+```
+[Service]
+Environment="HTTP_PROXY=http://proxy.example.com:8080/"
+Environment="HTTPS_PROXY=http://proxy.example.com:8080/"
+Environment="NO_PROXY=localhost,127.0.0.1,.example.com"
+```
+
+### 容器运行时代理
+
+在[容器](https://cloud.tencent.com/product/tke?from_column=20065&from=20065)运行阶段，如果需要代理上网，则需要配置 `~/.docker/config.json`。以下配置，只在Docker 17.07及以上版本生效。
+
+```json
+{
+ "proxies":
+ {
+   "default":
+   {
+     "httpProxy": "http://proxy.example.com:8080",
+     "httpsProxy": "http://proxy.example.com:8080",
+     "noProxy": "localhost,127.0.0.1,.example.com"
+   }
+ }
+}
+```
+
+也可以使用`-e`来注入环境变量，示例如下：
+
+```
+docker run -e VARIABLE_NAME=variable_value image_name
+```
+
+通过修改容器的配置文件 `config.json` 来设置网络代理。这种方法非常方便，因为一旦更改了配置文件并重新启动容器，新的配置就会生效。它适合个人开发环境，因为在这种情况下，你可能更倾向于在容器启动时应用全局的代理设置。
+
+然而，在CI/CD的自动构建环境或实际上线运行的环境中，使用 `config.json` 这种方法可能不太合适。在这些环境中，更好的选择是通过在容器运行时使用 `-e` 参数来注入环境变量，例如 `http_proxy`。这种显式地配置代理的方法更灵活，可以根据不同的部署环境动态设置代理，而不依赖于容器的配置文件。这样可以减轻对构建和部署环境的依赖，使得容器更具可移植性和适应性。
+
+### docker build时代理
+
+虽然 `docker build` 的本质，也是启动一个容器，但是环境会略有不同，用户级配置无效。在构建时，需要注入 `http_proxy` 等参数。
+
+```
+docker build . \
+    --build-arg "HTTP_PROXY=http://proxy.example.com:8080/" \
+    --build-arg "HTTPS_PROXY=http://proxy.example.com:8080/" \
+    --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com" \
+    -t your/image:tag
+```
+
+无论是 `docker run` 还是 `docker build`，默认是网络隔绝的，这样`localhost`默认是容器环境，如果代理使用的是 `localhost:3128` 这类，则会无效。这类仅限本地的代理，必须加上 `--network host` 才能正常使用。而一般则需要配置代理的外部IP，而且代理本身要开启 Gateway 模式。
+
+### 重启生效
+
+最后都需要对docker服务进行重新启动，例如：
+
+```bash
+sudo systemctl restart docker
+```
+
 ## 问题
 
 **缺少NVIDIA GPG Key**
