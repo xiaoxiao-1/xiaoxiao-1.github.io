@@ -20,30 +20,34 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-<meta property="og:type" content="website">
-<meta property="og:title" content="xiaoxiao-1&#39;s Blog">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="openMVG使用三维重建有两个比较完善的开源软件：colmap和openMVG。前者不用多说，提供了ui界面，各个功能做的也很完善，但是代码量巨大，可读性很差。OpenMVG 全称 Open Multiple View Geometry，是法国人 Pierre Moulon 读博期间开源的一个 C++ 库。但是比较遗憾的是没有提供gui界面，所以执行sfm的各个步骤需要使用命令行进行，这里是使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openMVG命令行用法">
+<meta property="og:url" content="http://example.com/2023/12/24/openMVG%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%A8%E6%B3%95/index.html">
 <meta property="og:site_name" content="xiaoxiao-1&#39;s Blog">
-<meta property="og:description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
+<meta property="og:description" content="openMVG使用三维重建有两个比较完善的开源软件：colmap和openMVG。前者不用多说，提供了ui界面，各个功能做的也很完善，但是代码量巨大，可读性很差。OpenMVG 全称 Open Multiple View Geometry，是法国人 Pierre Moulon 读博期间开源的一个 C++ 库。但是比较遗憾的是没有提供gui界面，所以执行sfm的各个步骤需要使用命令行进行，这里是使用">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-24T07:54:43.000Z">
+<meta property="article:modified_time" content="2023-12-24T07:57:50.161Z">
 <meta property="article:author" content="xiaoxiao-1">
+<meta property="article:tag" content="计算机视觉">
+<meta property="article:tag" content="slam">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/12/24/openMVG%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%A8%E6%B3%95/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>xiaoxiao-1's Blog</title>
+  <title>openMVG命令行用法 | xiaoxiao-1's Blog</title>
   
 
 
@@ -157,9 +161,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -175,10 +180,9 @@
       <meta itemprop="name" content="xiaoxiao-1's Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/24/openMVG%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">openMVG命令行用法</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          openMVG命令行用法
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -211,7 +215,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="openMVG使用"><a href="#openMVG使用" class="headerlink" title="openMVG使用"></a>openMVG使用</h1><p>三维重建有两个比较完善的开源软件：colmap和openMVG。前者不用多说，提供了ui界面，各个功能做的也很完善，但是代码量巨大，可读性很差。OpenMVG 全称 Open Multiple View Geometry，是法国人 Pierre Moulon 读博期间开源的一个 C++ 库。但是比较遗憾的是没有提供gui界面，所以执行sfm的各个步骤需要使用命令行进行，这里是使用openMVG的记录。</p>
+        <h1 id="openMVG使用"><a href="#openMVG使用" class="headerlink" title="openMVG使用"></a>openMVG使用</h1><p>三维重建有两个比较完善的开源软件：colmap和openMVG。前者不用多说，提供了ui界面，各个功能做的也很完善，但是代码量巨大，可读性很差。OpenMVG 全称 Open Multiple View Geometry，是法国人 Pierre Moulon 读博期间开源的一个 C++ 库。但是比较遗憾的是没有提供gui界面，所以执行sfm的各个步骤需要使用命令行进行，这里是使用openMVG的记录。</p>
 <p>openMVG的docs网址如下：</p>
 <p><a target="_blank" rel="noopener" href="https://openmvg.readthedocs.io/en/latest/">https://openmvg.readthedocs.io/en/latest/</a></p>
 <p>这个docs应该是好久没更新了，跟最新版本的openmvg的很多参数都对不上</p>
@@ -253,729 +257,35 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">必须的参数</span><br><span class="line">[-i|--input_file] 输入SfM_Data场景的路径</span><br><span class="line">[-o|--output_file] 输出SfM_Data场景的路径</span><br><span class="line">         .json, .bin, .xml, .ply, .baf</span><br><span class="line"></span><br><span class="line">[用于导出部分数据的选项（默认情况下导出所有数据）]</span><br><span class="line"></span><br><span class="line">可用于json/bin/xml格式</span><br><span class="line">[-V|--VIEWS] 导出视图</span><br><span class="line">[-I|--INTRINSICS] 导出内部参数</span><br><span class="line">[-E|--EXTRINSICS] 导出外部参数（视图姿势）</span><br><span class="line">[-S|--STRUCTURE] 导出结构</span><br><span class="line">[-C|--CONTROL_POINTS] 导出控制点</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="script"><a href="#script" class="headerlink" title="script"></a>script</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化输入</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_SfMInit_ImageListing -d /opt/openMVG/src/software/SfM/../../openMVG/exif/sensor_width_database/sensor_width_camera_database.txt -i /home/devil/10_11_subdataset/rgb/ -o /home/devil/10_11_subdataset/output/ -k <span class="string">&quot;665.5152;0;457.4575;0;665.5152;316.95375;0;0;1&quot;</span> -c 1 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取图片特征</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_ComputeFeatures -i /home/devil/10_11_subdataset/output/sfm_data.json -o /home/devil/10_11_subdataset/output/matchs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据特征生成匹配对</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_PairGenerator  -i /home/devil/10_11_subdataset/output/sfm_data.json -o /home/devil/10_11_subdataset/output/matchs/pairs.bin -m CONTIGUOUS -c 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行匹配</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_ComputeMatches -i /home/devil/10_11_subdataset/output/sfm_data.json -p /home/devil/10_11_subdataset/output/matchs/pairs.bin -r 0.7   -o /home/devil/10_11_subdataset/output/matchs/matches.bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误匹配剔除</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_GeometricFilter  -i /home/devil/10_11_subdataset/output/sfm_data.json -m /home/devil/10_11_subdataset/output/matchs/matchs.bin -o /home/devil/10_11_subdataset/output/matchs/matches.f.bin -g h  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 增量式SfM</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_SfM -s INCREMENTAL  -i /home/devil/10_11_subdataset/output/sfm_data.json -m /home/devil/10_11_subdataset/output/matchs -o /home/devil/10_11_subdataset/output/reconstruction</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出格式转换</span></span><br><span class="line">/opt/openMVG_Build/Linux-x86_64-RELEASE/openMVG_main_ConvertSfM_DataFormat -i /home/devil/10_11_subdataset/output/reconstruction/sfm_data.bin -o /home/devil/10_11_subdataset/output/export/sfm_data.json</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+              <a href="/tags/slam/" rel="tag"># slam</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/10/Textslam%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/10/Textslam%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">Textslam记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-10 17:50:29 / 修改时间：18:01:58" itemprop="dateCreated datePublished" datetime="2023-10-10T17:50:29+08:00">2023-10-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/slam/" itemprop="url" rel="index"><span itemprop="name">slam</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Textslam将文本对象的几何和语义先验紧密几何，将文本视为语义特征，随着对文本对象的局部平面特征和语义含义的全面探索，即使在图像模糊、大视点变化和显着光照变化（白天和夜间）等具有挑战性的条件下，SLAM 系统也变得更加准确和稳健</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/10/Textslam%E8%AE%B0%E5%BD%95/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/03/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/03/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title-link" itemprop="url">正则表达式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-03 16:31:41 / 修改时间：16:33:30" itemprop="dateCreated datePublished" datetime="2023-10-03T16:31:41+08:00">2023-10-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>正则表达式相关的一些记录</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/03/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/10/Textslam%E8%AE%B0%E5%BD%95/" rel="prev" title="Textslam记录">
+      <i class="fa fa-chevron-left"></i> Textslam记录
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/03/wget%E5%91%BD%E4%BB%A4%E8%B5%B0%E4%BB%A3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/03/wget%E5%91%BD%E4%BB%A4%E8%B5%B0%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">wget命令走代理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-03 16:26:47 / 修改时间：16:29:03" itemprop="dateCreated datePublished" datetime="2023-10-03T16:26:47+08:00">2023-10-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">linux工具</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>wget下载文件走代理</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/03/wget%E5%91%BD%E4%BB%A4%E8%B5%B0%E4%BB%A3%E7%90%86/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%81%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%81%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式之单例模式、工厂模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-09-11 13:02:25 / 修改时间：13:38:48" itemprop="dateCreated datePublished" datetime="2023-09-11T13:02:25+08:00">2023-09-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>c++设计模式中的单例模式和工厂模式</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%81%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/08/Docker%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/08/Docker%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">Docker使用记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-08 11:53:02" itemprop="dateCreated datePublished" datetime="2023-09-08T11:53:02+08:00">2023-09-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-12-22 18:09:27" itemprop="dateModified" datetime="2023-12-22T18:09:27+08:00">2023-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>docker使用过程中的记录</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/08/Docker%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/05/NetVlad%E5%8E%9F%E7%90%86%E5%92%8C%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/05/NetVlad%E5%8E%9F%E7%90%86%E5%92%8C%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">NetVlad原理和代码解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-05 10:50:16" itemprop="dateCreated datePublished" datetime="2023-09-05T10:50:16+08:00">2023-09-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-08 11:58:53" itemprop="dateModified" datetime="2023-09-08T11:58:53+08:00">2023-09-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>NetVlad是对Vlad的取聚类最临近操作进行改进，以让其能够使用CNN作为其前端进行端到端学习，同时文章中还提出了对比学习的弱监督学习方法用于VPR和谷歌街景作为新的数据集，对后面的工作影响深远。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/05/NetVlad%E5%8E%9F%E7%90%86%E5%92%8C%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/11/SuperPoint%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/08/11/SuperPoint%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">SuperPoint原理及代码解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-08-11 17:55:01" itemprop="dateCreated datePublished" datetime="2023-08-11T17:55:01+08:00">2023-08-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-08 11:55:58" itemprop="dateModified" datetime="2023-09-08T11:55:58+08:00">2023-09-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>SuperPoint是自监督特征点检测方法，在SLAM和SFM中有很重要的用处，并且在这些领域都取得了非常不错的效果</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/11/SuperPoint%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/16/g2o%E5%BA%93%E7%AE%80%E6%98%93%E6%95%99%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/16/g2o%E5%BA%93%E7%AE%80%E6%98%93%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">g2o库简易教程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-03-16 08:43:06" itemprop="dateCreated datePublished" datetime="2023-03-16T08:43:06+08:00">2023-03-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-11 13:08:55" itemprop="dateModified" datetime="2023-08-11T13:08:55+08:00">2023-08-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%9E%E7%BA%BF%E6%80%A7%E4%BC%98%E5%8C%96%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">非线性优化库</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>g2o库的简易教程</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/03/16/g2o%E5%BA%93%E7%AE%80%E6%98%93%E6%95%99%E7%A8%8B/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/01/RegNet-Multimodal-Sensor-Registration-Using-Deep-Neural-Networks%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.328888.xyz/2023/01/15/2npXX.jpeg">
-      <meta itemprop="name" content="xiaoxiao-1">
-      <meta itemprop="description" content="怕什么真理无穷，进步一寸有一寸的欢喜">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaoxiao-1's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/01/RegNet-Multimodal-Sensor-Registration-Using-Deep-Neural-Networks%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="post-title-link" itemprop="url">RegNet: Multimodal Sensor Registration Using Deep Neural Networks论文阅读</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-03-01 13:23:22" itemprop="dateCreated datePublished" datetime="2023-03-01T13:23:22+08:00">2023-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-11 13:08:55" itemprop="dateModified" datetime="2023-08-11T13:08:55+08:00">2023-08-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%9B%B8%E6%9C%BA%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/" itemprop="url" rel="index"><span itemprop="name">相机激光雷达联合标定</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%9B%B8%E6%9C%BA%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E8%81%94%E5%90%88%E6%A0%87%E5%AE%9A/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文使用CNN对图像和点云投影后的稀疏图像进行特征提取和特征匹配，然后回归正确的矫正位姿。本文还创造性地将矫正问题改写为矫正和去矫正问题，然后只需要改变decalib的参数就可以获得理论上无限的数据集。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/03/01/RegNet-Multimodal-Sensor-Registration-Using-Deep-Neural-Networks%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -1027,6 +337,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#openMVG%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">openMVG使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#openMVG%E7%9A%84pipelines"><span class="nav-number">1.1.</span> <span class="nav-text">openMVG的pipelines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Image-listing"><span class="nav-number">1.2.</span> <span class="nav-text">Image listing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Image-description-computation"><span class="nav-number">1.3.</span> <span class="nav-text">Image description computation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generate-Image-Pair"><span class="nav-number">1.4.</span> <span class="nav-text">Generate Image Pair</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compute-Matchs"><span class="nav-number">1.5.</span> <span class="nav-text">compute Matchs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Match-Filter"><span class="nav-number">1.6.</span> <span class="nav-text">Match Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Incremental-SfM"><span class="nav-number">1.7.</span> <span class="nav-text">Incremental SfM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Convert-SfM"><span class="nav-number">1.8.</span> <span class="nav-text">Convert SfM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#script"><span class="nav-number">1.9.</span> <span class="nav-text">script</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
